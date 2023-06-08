@@ -1,0 +1,8 @@
+projects/*
+!projects/.gitkeep
+
+.env
+
+archives
+
+*.tmp.*

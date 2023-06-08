@@ -1,0 +1,19 @@
+LOAD DATABASE
+     FROM  DATABASE_MYSQL_URL
+     INTO  DATABASE_PGQSL_URL
+
+ WITH include drop, create tables, create indexes, reset sequences,
+      /*play with this variables depending on the database you are trying to load https://github.com/dimitri/pgloader/issues/962 */
+      batch rows = 100000, batch size = 5MB, prefetch rows = 10000,
+      workers = 8, concurrency = 1,
+      multiple readers per thread, rows per range = 50000
+
+  SET PostgreSQL PARAMETERS
+      maintenance_work_mem to '128MB',
+      work_mem to '12MB',
+      search_path to 'sakila, public, "$user"'
+
+  SET MySQL PARAMETERS
+      net_read_timeout  = '120',
+      net_write_timeout = '120'
+;
