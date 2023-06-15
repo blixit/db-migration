@@ -1,0 +1,2 @@
+#pattern  filter=crypt diff=crypt merge=crypt
+.env.dev-secrets filter=crypt-dev-env diff=crypt-dev-env merge=crypt-dev-env
