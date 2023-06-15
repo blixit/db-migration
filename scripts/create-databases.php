@@ -19,9 +19,10 @@
     
     $databaseName = $argv[1];
 
-    printf("Creating database '%s'... \n", $databaseName);
-
+    printf("[create-databases.php] Droping database '%s'... ⏳ \n", $databaseName);
     $connection->query( 'DROP DATABASE ' . $databaseName );
+    
+    printf("[create-databases.php] Creating database '%s'... ⏳ \n", $databaseName);
     $connection->query( 'CREATE DATABASE ' . $databaseName );
 
-    printf("Done !\n");
+    printf("[create-databases.php] Done ! ✅\n");

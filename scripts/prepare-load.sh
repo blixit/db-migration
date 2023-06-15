@@ -23,7 +23,7 @@ DATABASE_TARGET_NAME="$4"
 DATABASE_TARGET_NAME=${DATABASE_TARGET_NAME:=${DATABASE_SOURCE_NAME}}
 
 if [[ "$1" == "--help" ]]; then
-    echo 'USAGE:'
+    echo '[prepare-load.sh] USAGE:'
     echo "prepare-load.sh [DATABASE_SOURCE_URL] [DATABASE_TARGET_URL] [DATABASE_SOURCE_NAME]"
     echo "prepare-load.sh [DATABASE_SOURCE_URL] [DATABASE_TARGET_URL] [DATABASE_SOURCE_NAME] [DATABASE_TARGET_NAME]"
     echo '\nExample:'
@@ -33,7 +33,7 @@ fi
 
 if [[ ! $DATABASE_SOURCE_URL =~ $urlRegex || ! $DATABASE_TARGET_URL =~ $urlRegex  ]]
 then 
-    echo "One of ($DATABASE_SOURCE_URL, $DATABASE_TARGET_URL) is not a valid url."
+    echo "[prepare-load.sh] One of ($DATABASE_SOURCE_URL, $DATABASE_TARGET_URL) is not a valid url. ❌"
     exit 1;
 fi
 
@@ -43,18 +43,21 @@ TMP_FILE="mysql-to-pgsql.${DATABASE_SOURCE_NAME}.load.tmp"
 OUTPUT_FILE="${PROJECT_LOCATION}/mysql-to-pgsql.load"
 
 if [[ -f "$OUTPUT_FILE" ]]; then
-    echo "This project already exists. The existing files won't be created or deleted"
+    echo "[prepare-load.sh] This project already exists. The existing files won't be created or deleted"
 else
     mkdir -p $PROJECT_LOCATION
 
-    echo "Writing Mysql url..."
+    echo "[prepare-load.sh] Writing Mysql url... ⏳"
     sed "s#DATABASE_MYSQL_URL#${DATABASE_SOURCE_URL}#" samples/mysql-to-pgsql.sample.load > $TMP_FILE
+    echo "[prepare-load.sh] Done ✅"
 
-    echo "Writing Pgsql url..."
+    echo "[prepare-load.sh] Writing Pgsql url... ⏳"
     # PGsql is case sensitive
     db_target_to_lower=$(echo "${DATABASE_TARGET_URL}" | tr "[:upper:]" "[:lower:]")
     sed "s#DATABASE_PGQSL_URL#${db_target_to_lower}#" $TMP_FILE > $OUTPUT_FILE
+    echo "[prepare-load.sh] Done ✅"
 
-    echo "Removing temporary files..."
+    echo "[prepare-load.sh] Removing temporary files... ⏳"
     rm -rf $TMP_FILE
+    echo "[prepare-load.sh] Done ✅"
 fi
